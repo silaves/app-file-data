@@ -1,71 +1,79 @@
 # app-file-data
-# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Stack
 
-In the project directory, you can run:
+- ReactJS
+- ReduxJS
+- React-Bootstrap
+- Bootstrap
 
-### `npm start`
+## Guía rápida para levantar la aplicación
+Puede levantar la aplicación de 3 maneras.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Entorno de desarrollo:** A nivel local con configuración para desarrollo. (Punto 1)
+- **docker-compose:** Ejecutando el comando `docker-compose up -d --build`, la manera mas sencilla. (Punto 2)
+- **docker:** Creando la imagen y corriendo el contenedor. (Punto 5)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**NOTA:** No olvide crear el archivo `.env` antes de ejecutar los anteriores puntos. Puede copiarse del archivo `.env.example` que ya tiene las variables configuradas.
 
-### `npm test`
+## 1. Configuración del entorno de desarrollo
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Clonar repositorio
 
-### `npm run build`
+```bash
+git clone .....
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Instalar dependencias
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Generar archivo `.env`
+```bash
+cp .env.example .env
+```
 
-### `npm run eject`
+Ejecuta la aplicación en el modo de desarrollo.Abrir [http://localhost:3000](http://localhost:3000) para verlo en su navegador.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm run start
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 2. Docker-compose
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+El siguiente proyecto contiene `docker-compose.yml` que configura todo el entorno de desarrollo.
+Ejecute `docker-compose up -d --build` para ejecutar la pila de desarrollo. Tenga en cuenta que la
+carpeta del proyecto se monta en la imagen docker y aplicación se inicia en modo `development`,
+cualquier cambio en el código fuente se volverá a cargar la aplicación por lo que es más fácil para el desarrollador.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 3. Creación de una imagen Docker
 
-## Learn More
+```bash
+docker build -t app-file-data:latest -f Dockerfile.prod .
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 4. Configuración
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Variables de entorno `.env`
+Las variables de configuración de la aplicación se encuentran en los ficheros `.env.*`.
 
-### Code Splitting
+Tenga en cuenta que `.env` no se registra en el repositorio Git. Debe crearse por separado y suministrarse
+al contenedor Docker en ejecución, por ejemplo, a través de volúmenes montados.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 5. Despliegue a producción
 
-### Analyzing the Bundle Size
+Para el despliegue en `production` de la aplicación:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Cree la imagen del contenedor `docker build -t app-file-data:latest -f Dockerfile.prod .`.
+2. Cree o copie el archivo `.env`. `cp .env.example .env`
+3. Inicie el contenedor y monte el archivo `.env` como volumen
 
-### Making a Progressive Web App
+```bash
+docker run -d -p 3000:80 --name app-file-data app-file-data:latest
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- La aplicación es accesible a través del puerto `3000`.
