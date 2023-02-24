@@ -1,6 +1,6 @@
 import {useLazyGetAllFilesDataQuery} from "../../store/services/getFileDataApiSlice";
 import {useEffect} from "react";
-import {hideMessage, showMessage} from "../../store/services/errorMessageSlice";
+import {showMessage} from "../../store/services/errorMessageSlice";
 import {useDispatch} from "react-redux";
 import {SimpleTable} from "../Table/SimpleTable";
 
@@ -11,7 +11,7 @@ export const DataFileTable = () => {
 
   useEffect(() => {
     getContentFile();
-  }, []);
+  }, [getContentFile]);
 
   useEffect(() => {
     if (getContentFileResult.isError) {
@@ -20,7 +20,7 @@ export const DataFileTable = () => {
         msg: "Ocurrio un problema"
       }));
     }
-  }, [getContentFileResult.isError]);
+  }, [getContentFileResult.isError, dispatch]);
 
   const convertToJsonFormat = (array) => {
     const jsonData = [];

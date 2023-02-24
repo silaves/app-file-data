@@ -11,7 +11,7 @@ export const CardFileList = () => {
 
   useEffect(() => {
     getAllFiles();
-  }, []);
+  }, [getAllFiles]);
 
   useEffect(() => {
     if (geAllFilesResult.isError) {
@@ -20,7 +20,7 @@ export const CardFileList = () => {
         msg: "Ocurrio un problema"
       }));
     }
-  }, [geAllFilesResult.isError]);
+  }, [geAllFilesResult.isError, dispatch]);
 
   const convertToJsonFormat = (array) => {
     const jsonData = [];

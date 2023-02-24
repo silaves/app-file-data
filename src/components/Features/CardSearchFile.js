@@ -26,7 +26,7 @@ export const CardSearchFile = () => {
       }
       dispatch(showMessage(payload));
     }
-  }, [getContentFileResult]);
+  }, [getContentFileResult, dispatch]);
 
   const handleFilenameChange = (event) => {
     setFilename(event.target.value);
